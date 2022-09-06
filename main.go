@@ -7,11 +7,25 @@ import (
 )
 
 func main () {
-    fmt.Println("Hello World")
 
     for i := 0; i < 9; i++ {
+        
         board.DisplayBoard()
-        player.TakeTurn()
+        choice := player.TakeTurn(board.Squares)
+        board.UpdateBoard(choice, player.Player)
+        
+        if board.WinCheck(player.Player) {
+
+            board.DisplayBoard()
+            fmt.Println("")
+            fmt.Println("Player", player.Player, "wins!")
+
+            return
+        }
+
+        player.ChangePlayer()
     }
+
+    fmt.Println("Cat. No one wins.")
 }
 

@@ -1,38 +1,44 @@
 package player
 
 import (
-    "fmt"
-    "strconv"
+	"fmt"
+	"strconv"
 )
 
-var player string = "X"
+var Player string = "X"
 
-func TakeTurn() (choiceReturn int64) {
-    var choice string
-    
+func TakeTurn(squares [10]string) (choice string) {
+
     for {
         fmt.Println("")
-        fmt.Printf("Player %v's Turn, select square: ", player)
+        fmt.Printf("Player %v's Turn, select square: ", Player)
         fmt.Scan(&choice)
 
-        if validChoice(choice) {break}
+        if validateChoice(choice, squares) {break}
+        fmt.Println("Please select a number between 1 and 9 that hasn't already been chosen.")
     }
 
-    choiceInt, _ := strconv.ParseInt(choice, 10, 0)
-    return choiceInt
-
+    return choice
 }
 
-func validChoice(choice string) (valid bool) {
-    choiceInt, choiceErr := strconv.ParseInt(choice, 10, 0)
-    
-    if choiceErr == nil {
-        return false
-    }
+func validateChoice(choice string, squares [10]string) (isValid bool) {
 
-    if choiceInt <= 1 || choiceInt >= 9 {
-        return false
-    }
+    choiceInt, choiceErr := strconv.ParseInt(choice, 10, 0)
+    // fmt.Println("Choice:", choiceInt, choiceErr)
+    if choiceErr != nil || choiceInt < 1 || choiceInt > 9 {return false}
+
+    squareInt, squareErr := strconv.ParseInt(squares[choiceInt], 10, 0)
+    // fmt.Println("Square:", squareInt, squareErr)
+    if choiceInt != squareInt || squareErr != nil {return false}
 
     return true
+}
+
+func ChangePlayer() {
+
+    if Player == "X" {
+        Player = "O"
+    } else {
+        Player = "X"
+    }
 }
